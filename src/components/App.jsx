@@ -10,6 +10,12 @@ import ContactList from "./ContactList/ContactList";
 class App extends Component {
 
   static propTypes = {
+    addContact: propTypes.func,
+    deleteContact: propTypes.func,
+    handleFilterInput: propTypes.func,
+    filteredContact:propTypes.func,
+    filter: propTypes.string,
+
     
   }
 
@@ -21,35 +27,29 @@ class App extends Component {
       { id: 'id-5', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
+  }
+  
+  checkingAddedContact = (outName) => {
+    const res = this.state.contacts.find(({ name }) => {
+      if (name === outName ) {
+        return name
+      }
+    })
+    return res
   }
 
-  handleImputChange = event => {
-    console.log(event.currentTarget.value);
-    this.setState({ [event.currentTarget.name]: event.currentTarget.value })
-  }
-
-  handleSubmit = event => {
-    event.preventDefault()
-    console.log(this.state);
-    this.setState(({ contacts }) => [this.state.name, ...contacts])
-    console.log(this.state);
-  }
-
-  addNewContact = event => {
-    event.preventDefault()
+  addContact = ({ name,number }) => {
     const contact = {
-      id: this.state.name,
-      name: this.state.name,
-      number: this.state.number,
-
+      id: nanoid(3),
+      name,
+      number,
     }
-    this.setState(({ contacts }) => ({
-      contacts: [contact, ...contacts]
-    }))
-    this.reset()
-
+    const newContact = this.checkingAddedContact(name)
+    
+    newContact ? alert(`${newContact.name} is already in contacts`)
+               : this.setState(({ contacts }) => ({
+                contacts: [contact, ...contacts]
+              }))
   }
 
   deleteContact = contId => {
@@ -58,78 +58,51 @@ class App extends Component {
     }))
   }
 
-  changeFilter = event => {
+  handleFilterInput = event => {
     this.setState({filter: event.currentTarget.value})
   }
- 
 
-  reset = () => {
-    this.setState({
-    name: '',
-    number: '',
-  })
+  getFilteredContacts = () => {
+    const { filter, contacts } = this.state
+
+    const normalizedFilter = filter.toLowerCase()
+    return contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter))
   }
 
   render() {
-    const notmFilter = this.state.filter.toLowerCase()
-    const filteredContact = this.state.contacts.filter(contact => contact.name.toLowerCase().includes(notmFilter))
+
+    const { addContact, handleFilterInput, deleteContact} = this
+    const { filter } = this.state
+    const filteredContact = this.getFilteredContacts()
 
     return (
       <main>
-        <h1>Phonebook</h1>
-        {/* <ContactForm /> */}
-        <form action="" onSubmit={this.addNewContact}>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              // required
-              onChange={this.handleImputChange}
-              value={this.state.name}
-            />
-          </label>
-          <label>
-            Number
-            <input
-              type="tel"
-              name="number"
-              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              onChange={this.handleImputChange}
-              value={this.state.number}
-              // required
-            />
-          </label>
-          <button type="sybmit">Add</button>
-        </form>
-        
 
-        <h2>Contacts</h2>
-        <form action="">
-          <label>Find by contact name
-            <input type="text" name="filter" value={this.state.filter} onChange={this.handleImputChange}></input>
-          </label>
-        </form>
+        <h1 className="titlePhonebook">Phonebook</h1>
+        <ContactForm onSubmit={ addContact }/>
 
+        <h2 className="titleContacts">Contacts</h2>
+        <Filter value={ filter } onChange={ handleFilterInput }/>
+        <ContactList filteredContact={ filteredContact } deleteContact={ deleteContact }/>
 
-        
-        
-        {/* <Filter/> */}
-        {/* <ContactList /> */}
-        <ul className="">
-          {filteredContact.map(item =>
-            <li className="" key={item.id}>
-              <span className="">{`${item.name}: ${item.number}`}</span>
-              <button onClick={()=> this.deleteContact(item.id)}>Delete</button>
-            </li>)}
-        </ul>
-        
       </main>
     )
   }
 };
 
 export default App
+
+
+
+// ----------------- рендер контакта который есть в списке ------
+// {
+//             r ? <li className="" key={r.id}>
+//                 <span className="">{`${r.name}: ${r.number}`}</span>
+//                 <button onClick={() => this.deleteContact(r.id)}>Delete</button>
+//                 </li>
+//               : filteredContact.map(({ id, name, number }) => {
+//                 return <li className="" key={id}>
+//                 <span className="">{`${name}: ${number}`}</span>
+//                 <button onClick={() => this.deleteContact(id)}>Delete</button>
+//                 </li>
+//}

@@ -1,0 +1,13 @@
+.label {
+  display: flex;
+  flex-wrap: wrap;
+  width: 300px;
+  margin: 0 auto;
+  padding: 0 20px;
+  font-weight: 500;
+  font-size: 16px;
+  gap: 10px;
+}
+
+.inputFilter {
+}
