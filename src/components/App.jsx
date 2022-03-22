@@ -28,12 +28,12 @@ class App extends Component {
   }
 
   addContact = ({ name, number }) => {
-    const newContact = this.checkingAddedContact(name)
     const contact = {
       id: nanoid(3),
       name,
       number,
     }
+    const newContact = this.checkingAddedContact(name)
   
     newContact ? alert(`${newContact.name} is already in contacts`)
                : this.setState(({ contacts }) => ({
