@@ -19,11 +19,7 @@ class App extends Component {
   }
   
   checkingAddedContact = (outName) => {
-    const res = this.state.contacts.find(({ name }) => {
-      if (name === outName ) {
-        return name
-      }
-    })
+    const res = this.state.contacts.find(({ name }) => name === outName)
     return res
   }
 
