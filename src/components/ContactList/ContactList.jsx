@@ -1,9 +1,41 @@
 import React,{ Component } from "react";
 import propTypes from "prop-types";
 import css from './ContactList.module.css'
+import ContactItem from "components/ContactItem/ContactItem";
 
 class ContactList extends Component {
     static propTypes = {
+        contacts: propTypes.arrayOf(propTypes.exact({
+            id: propTypes.string.isRequired,
+            name: propTypes.string.isRequired,
+            number: propTypes.string.isRequired,
+        })),
+        deleteContact: propTypes.func.isRequired
+    }
+
+    handleDelete = contId => {
+        this.props.deleteContact(contId)
+    }
+
+    render() {
+        const { contacts } = this.props
+        const { handleDelete } = this
+        
+        return (
+            <ul className={css.contactList}>
+                {
+                contacts.map(({id,name,number}) =>
+                    <ContactItem id={ id }name={ name } number={ number } onDelete={ handleDelete } key={ id }/>
+                    )
+                }  
+            </ul>
+        )
+        
+    }
+
+}
+
+ContactList.propTypes = {
         filteredContact: propTypes.arrayOf(propTypes.exact({
             id: propTypes.string,
             name: propTypes.string,
@@ -11,22 +43,5 @@ class ContactList extends Component {
         })),
         deleteContact: propTypes.func,
     }
-    
-
-    render() {
-        const {filteredContact,deleteContact} = this.props
-        return (
-            <ul className={css.contactList}>
-                {
-                    filteredContact.map(({ id, name, number }) =>
-                    <li className={css.contactList__item} key={id}>
-                            <span className={css.contactList__text}>{`${name}: ${number}`}</span>
-                            <button className={css.contactList__button} onClick={() => deleteContact(id)}>Delete</button>
-                    </li>)
-                }
-            </ul>
-        )
-    }
-}
 
 export default ContactList

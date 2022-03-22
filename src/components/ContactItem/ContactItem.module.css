@@ -1,0 +1,28 @@
+.contactList__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.contactList__item::before {
+  content: '';
+  display: inline-block;
+  background-color: rgb(255, 255, 255);
+  width: 4px;
+  height: 4px;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+
+.contactList__item:hover {
+  background-color: rgba(107, 107, 107, 0.2);
+}
+
+.contactList__text {
+  margin-left: 10px;
+}
+
+.contactList__button {
+  margin-left: auto;
+  cursor: pointer;
+}

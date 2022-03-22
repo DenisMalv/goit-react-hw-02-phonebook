@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import propTypes from "prop-types";
 import { nanoid } from 'nanoid'
 
 import Filter from "./Filter/Filter";
@@ -8,16 +7,6 @@ import ContactList from "./ContactList/ContactList";
 
 
 class App extends Component {
-
-  static propTypes = {
-    addContact: propTypes.func,
-    deleteContact: propTypes.func,
-    handleFilterInput: propTypes.func,
-    filteredContact:propTypes.func,
-    filter: propTypes.string,
-
-    
-  }
 
   state = {
     contacts: [
@@ -38,14 +27,14 @@ class App extends Component {
     return res
   }
 
-  addContact = ({ name,number }) => {
+  addContact = ({ name, number }) => {
+    const newContact = this.checkingAddedContact(name)
     const contact = {
       id: nanoid(3),
       name,
       number,
     }
-    const newContact = this.checkingAddedContact(name)
-    
+  
     newContact ? alert(`${newContact.name} is already in contacts`)
                : this.setState(({ contacts }) => ({
                 contacts: [contact, ...contacts]
@@ -53,10 +42,10 @@ class App extends Component {
   }
 
   deleteContact = contId => {
-    this.setState(prevState => ({
-      contacts : prevState.contacts.filter(item=> item.id !== contId)
-    }))
-  }
+        this.setState(prevState => ({
+        contacts : prevState.contacts.filter(item=> item.id !== contId)
+        }))
+    }
 
   handleFilterInput = event => {
     this.setState({filter: event.currentTarget.value})
@@ -83,8 +72,8 @@ class App extends Component {
 
         <h2 className="titleContacts">Contacts</h2>
         <Filter value={ filter } onChange={ handleFilterInput }/>
-        <ContactList filteredContact={ filteredContact } deleteContact={ deleteContact }/>
-
+        <ContactList contacts={filteredContact} deleteContact={ deleteContact }/>
+  
       </main>
     )
   }

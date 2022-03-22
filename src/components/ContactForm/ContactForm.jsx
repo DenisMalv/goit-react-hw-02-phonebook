@@ -9,11 +9,7 @@ const initialState = {
 
 class ContactForm extends Component {
     static propTypes = {
-        handleImputChange: propTypes.func,
-        handleSubmit: propTypes.func,
-        reset: propTypes.func,
-        name: propTypes.string,
-        number:propTypes.string,
+        onSubmit: propTypes.func,
     }
 
     state = {
